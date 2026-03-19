@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forward Moves | Resource Hub</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        violet: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            900: '#4c1d95',
+                        }
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(18px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        }
+                    },
+                    animation: {
+                        fadeUp: 'fadeUp 0.45s ease both',
+                        fadeIn: 'fadeIn 0.3s ease both',
+                        shimmer: 'shimmer 2s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ── scrollbar ── */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            background-color: #fafafa;
+        }
+
+        /* ── glass card ── */
+        .glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(228, 228, 231, 0.6);
+        }
+
+        /* ── subtle shadow ── */
+        .card-shadow {
+            box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-shadow-lg {
+            box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.10), 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ── hover ── */
+        .hover-lift {
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 48px -12px rgba(124, 58, 237, 0.18);
+        }
+
+        /* ── sticky sidebar ── */
+        @media (min-width: 1024px) {
+            .sidebar-sticky {
+                position: sticky;
+                top: 80px;
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+            }
+        }
+
+        /* ── hero mesh gradient ── */
+        .hero-mesh {
+            background:
+                radial-gradient(ellipse 80% 60% at 70% 20%, rgba(167, 139, 250, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 10% 80%, rgba(196, 181, 253, 0.14) 0%, transparent 55%),
+                #fafafa;
+        }
+
+        /* ── active nav pill ── */
+        .nav-active {
+            background: #18181b;
+            color: #fff;
+        }
+
+        /* ── section fade-up on scroll (JS-driven) ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .revealed {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── progress dots ── */
+        .dot-active {
+            background: #18181b;
+            width: 20px;
+            border-radius: 4px;
+        }
+
+        /* ── chip ── */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        /* ── shimmer button ── */
+        .btn-shimmer {
+            background: linear-gradient(90deg, #18181b 35%, #3f3f46 50%, #18181b 65%);
+            background-size: 200% 100%;
+            animation: shimmer 2.4s linear infinite;
+        }
+
+        /* ── portal active ring ── */
+        .portal-active {
+            background: #fff;
+            border-color: #18181b;
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.14);
+        }
+
+        /* ── stagger children ── */
+        .stagger>*:nth-child(1) {
+            animation-delay: 0.0s;
+        }
+
+        .stagger>*:nth-child(2) {
+            animation-delay: 0.06s;
+        }
+
+        .stagger>*:nth-child(3) {
+            animation-delay: 0.12s;
+        }
+
+        .stagger>*:nth-child(4) {
+            animation-delay: 0.18s;
+        }
+
+        .stagger>*:nth-child(5) {
+            animation-delay: 0.24s;
+        }
+
+        .stagger>*:nth-child(6) {
+            animation-delay: 0.30s;
+        }
+
+        /* ── tag strip ── */
+        .tag-strip {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: #f4f4f5;
+            color: #71717a;
+        }
+    </style>
+</head>
+
+<body class="text-zinc-900">
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect, useRef } = React;
+
+        /* ─────────── DATA ─────────── */
+
+        const NAVS = [
+            { id: 'home', label: 'Overview' },
+            { id: 'studio', label: 'Skill Studio' },
+            { id: 'paths', label: 'Careers' },
+            { id: 'community', label: 'Community' },
+            { id: 'mastery', label: 'Interviewing' },
+            { id: 'glossary', label: 'Glossary' },
+        ];
+
+        const PORTALS = [
+            { id: 'Anthropic', n: 'Anthropic', u: 'https://anthropic.skilljar.com/', d: 'Anthropic provides direct access to frontier-model research and AI development resources.', icon: '⚡', bg: 'bg-violet-50/60', border: 'border-violet-100' },
+            { id: 'edX', n: 'edX', u: 'https://authn.edx.org/login?next=https%3A%2F%2Flearning.edx.org%2Fcourse%2Fcourse-v1%3AAI%2Bllmops3x%2B1T2024%2Fhome', d: 'edX is a global learning platform offering courses from world-class universities and industry leaders.', icon: '🧠', bg: 'bg-emerald-50/60', border: 'border-emerald-100' },
+            { id: 'LHH', n: 'LHH', u: 'https://www.lhh.com/en-us', d: 'LHH brings together global excellence, local knowledge, and decades of experience to support companies and professionals across the talent lifecycle.', icon: '💼', bg: 'bg-zinc-50', border: 'border-zinc-200' },
+            { id: 'LinkedIn', n: 'LinkedIn Learning', u: 'https://www.linkedin.com/learning-login/continue?account=67698794&forceAccount=false&authUUID=q95hhwNFS%2BWFOWMQt%2BnDKg%3D%3D&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2F%3Fu%3D67698794', d: 'LinkedIn Learning offers professional skill development through a vast library of expert-led video content.', icon: '🔗', bg: 'bg-blue-50/60', border: 'border-blue-100' },
+            { id: 'Microsoft', n: 'Microsoft', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/', d: 'Microsoft provides comprehensive training modules for mastering AI architecture and safe deployment at enterprise scale.', icon: '💡', bg: 'bg-sky-50/60', border: 'border-sky-100' },
+            { id: 'Pega', n: 'Pega', u: 'https://academy.pega.com/', d: 'Pega offers enterprise-grade automation and workflow optimization training for digital transformation professionals.', icon: '🏛️', bg: 'bg-zinc-50', border: 'border-zinc-200' },
+            { id: 'SAFe', n: 'SAFe', u: 'https://connect.scaledagile.com/login', d: 'The Scaled Agile Framework provides guidance for implementing lean-agile practices at enterprise scale.', icon: '🛡️', bg: 'bg-rose-50/60', border: 'border-rose-100' },
+            { id: 'Udemy', n: 'Udemy', u: 'https://verizonreskilling.udemy.com/', d: 'Udemy is a broad marketplace of technical and strategic AI courses curated for professional growth.', icon: '🎓', bg: 'bg-orange-50/60', border: 'border-orange-100' },
+            { id: 'Verizon', n: 'Verizon Reskilling', u: 'https://www.verizon.com/about/responsibility/human-prosperity/reskilling-program', d: 'Verizon offers technical reskilling programs focused on workforce readiness and digital prosperity.', icon: '📡', bg: 'bg-red-50/60', border: 'border-red-100' },
+        ];
+
+        const LEARNING_MODULES = [
+            // Anthropic
+            { p: 'Anthropic', e: '⚡', n: 'Claude Code In Action', d: 'AI-assisted coding workflows and real-world application patterns.', u: 'https://anthropic.skilljar.com/claude-code-in-action' },
+            { p: 'Anthropic', e: '🌱', n: 'Claude 101', d: 'Core interaction patterns with the Claude model family.', u: 'https://anthropic.skilljar.com/claude-101' },
+            { p: 'Anthropic', e: '🧠', n: 'AI Fluency: Foundations', d: 'Core AI terminology, mental models, and key concepts.', u: 'https://anthropic.skilljar.com/ai-fluency-framework-foundations' },
+            { p: 'Anthropic', e: '🎓', n: 'Teaching AI Fluency', d: 'Strategies for instructing others in AI concepts and practices.', u: 'https://anthropic.skilljar.com/teaching-ai-fluency' },
+            { p: 'Anthropic', e: '📚', n: 'AI Fluency For Educators', d: 'AI methodology tailored to academic and educational settings.', u: 'https://anthropic.skilljar.com/ai-fluency-for-educators' },
+            { p: 'Anthropic', e: '🎒', n: 'AI Fluency For Students', d: 'Leveraging AI tools effectively for learning and research.', u: 'https://anthropic.skilljar.com/ai-fluency-for-students' },
+            { p: 'Anthropic', e: '🤝', n: 'AI Fluency For Nonprofits', d: 'Creating social impact through thoughtful AI integration.', u: 'https://anthropic.skilljar.com/ai-fluency-for-nonprofits' },
+            { p: 'Anthropic', e: '🛠️', n: 'Claude API', d: 'Full API implementation guide for production deployments.', u: 'https://anthropic.skilljar.com/claude-with-the-anthropic-api' },
+            { p: 'Anthropic', e: '🔗', n: 'Intro to Model Context Protocol', d: 'Standard protocol for structured data integration and exchange.', u: 'https://anthropic.skilljar.com/introduction-to-model-context-protocol' },
+            { p: 'Anthropic', e: '🚀', n: 'MCP: Advanced Topics', d: 'Deep-dive into Model Context Protocol architecture and patterns.', u: 'https://anthropic.skilljar.com/model-context-protocol-advanced-topics' },
+            { p: 'Anthropic', e: '☁️', n: 'Claude with Amazon Bedrock', d: 'Deploying Claude within Amazon cloud infrastructure at scale.', u: 'https://anthropic.skilljar.com/claude-in-amazon-bedrock' },
+            { p: 'Anthropic', e: '🌐', n: 'Claude with Vertex AI', d: 'Integrating Claude into Google Cloud platform environments.', u: 'https://anthropic.skilljar.com/claude-with-google-vertex' },
+            { p: 'Anthropic', e: '🤖', n: 'Intro to Agent Skills', d: 'Foundations for building autonomous AI agents and pipelines.', u: 'https://anthropic.skilljar.com/introduction-to-agent-skills' },
+            // Microsoft
+            { p: 'Microsoft', e: '💡', n: 'Episode 1: Intro to Gen AI', d: 'Introduction to Generative AI and Large Language Models.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/introduction-to-generative-ai-and-llms-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '🔭', n: 'Episode 2: Exploring LLMs', d: 'Comparing and evaluating different LLM architectures.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/exploring-and-comparing-different-llms-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '⚖️', n: 'Episode 3: Responsible AI', d: 'Frameworks for using Generative AI responsibly and safely.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/using-generative-ai-responsibly-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '⌨️', n: 'Episode 4: Prompt Engineering', d: 'Fundamentals of prompt engineering and instruction design.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/understanding-prompt-engineering-fundamentals-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '🚀', n: 'Episode 5: Advanced Prompts', d: 'Advanced prompting techniques for precise AI control.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/creating-advanced-prompts-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '📝', n: 'Episode 6: Text Generation', d: 'Building text-generation applications with generative models.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/building-text-generation-applications-generative-ai-for-beginners' },
+            { p: 'Microsoft', e: '💬', n: 'Episode 7: Chat Apps', d: 'Building LLM-powered chat applications from scratch.', u: 'https://learn.microsoft.com/en-us/shows/generative-ai-for-beginners/building-chat-applications-generative-ai-for-beginners' },
+            // Pega
+            { p: 'Pega', e: '🏛️', n: 'Pega Academy', d: 'Enterprise automation and workflow optimization training hub.', u: 'https://academy.pega.com/' },
+            { p: 'Pega', e: '🤖', n: 'Pega Process AI Essentials', d: 'AI-powered process automation and decisioning fundamentals.', u: 'https://academy.pega.com/mission/pega-process-ai-essentials/v7' },
+            // SAFe
+            { p: 'SAFe', e: '🛡️', n: 'SAFe Login Portal', d: 'Access the Scaled Agile Framework training and certification platform.', u: 'https://connect.scaledagile.com/login' },
+            { p: 'Verizon', e: '📡', n: 'Verizon Reskilling Program', d: 'Technical reskilling programs focused on workforce readiness and digital prosperity.', u: 'https://www.verizon.com/about/responsibility/human-prosperity/reskilling-program' },
+            { p: 'Verizon', e: '🎓', n: 'Udemy — AI Leader Cert', d: 'Generative AI leadership strategy and certification, via Verizon Udemy access.', u: 'https://verizonreskilling.udemy.com/course/ai-leader-the-ultimate-generative-ai-leader-cert-training/' },
+            { p: 'Verizon', e: '🌟', n: 'edX — Skill Forward', d: 'Exclusive career reskilling pathways curated for Verizon alumni.', u: 'https://enterprise.edx.org/verizon-skill-forward/search' },
+            { p: 'LinkedIn', e: '🔗', n: 'LinkedIn Learning Portal', d: 'Access the full LinkedIn Learning library — courses, paths, and certificates.', u: 'https://www.linkedin.com/learning-login/continue?account=67698794&forceAccount=false&authUUID=q95hhwNFS%2BWFOWMQt%2BnDKg%3D%3D&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2F%3Fu%3D67698794' },
+            { p: 'LinkedIn', e: '🎯', n: 'AI & Machine Learning Paths', d: 'Curated LinkedIn Learning paths for AI fluency and machine learning skills.', u: 'https://www.linkedin.com/learning-login/continue?account=67698794&forceAccount=false&authUUID=q95hhwNFS%2BWFOWMQt%2BnDKg%3D%3D&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2F%3Fu%3D67698794' },
+            { p: 'LinkedIn', e: '💼', n: 'Career Development Courses', d: 'Professional growth, leadership, and career transition courses on LinkedIn.', u: 'https://www.linkedin.com/learning-login/continue?account=67698794&forceAccount=false&authUUID=q95hhwNFS%2BWFOWMQt%2BnDKg%3D%3D&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2F%3Fu%3D67698794' },
+            { p: 'edX', e: '🧠', n: 'LLM Ops', d: 'Large Language Model operations, monitoring, and management.', u: 'https://learning.edx.org/course/course-v1:AI+llmops3x+1T2024/home' },
+            { p: 'edX', e: '🌟', n: 'Skill Forward', d: 'Exclusive career reskilling pathways curated for alumni.', u: 'https://enterprise.edx.org/verizon-skill-forward/search' },
+            // Udemy
+            { p: 'Udemy', e: '🎓', n: 'AI Leader Cert', d: 'Generative AI leadership strategy and certification program.', u: 'https://verizonreskilling.udemy.com/course/ai-leader-the-ultimate-generative-ai-leader-cert-training/' },
+            { p: 'Udemy', e: '🛡️', n: 'AI Auditing', d: 'Governance frameworks and accountability practices for AI systems.', u: 'https://verizonreskilling.udemy.com/course/ai-audit-certification-mastercalss/' },
+            { p: 'Udemy', e: '🔐', n: 'AI Governance', d: 'Risk management and compliance for LLM deployments.', u: 'https://verizonreskilling.udemy.com/course/ai-governance-professional-aigp-2025/' },
+            { p: 'Udemy', e: '📈', n: 'AI Mock Exam', d: 'Practice exams for AI certification preparation.', u: 'https://verizonreskilling.udemy.com/course/google-cloud-generative-ai-leader-3-mock-generative-ai-leader-exams/' },
+            // LHH
+            { p: 'LHH', e: '💼', n: 'Career Transition', d: 'Lee Hecht Harrison professional coaching and support services.', u: 'https://www.lhh.com/en-us' },
+            { p: 'LHH', e: '📝', n: 'Presence Guide', d: 'Optimizing your digital profile for the modern hiring process.', u: 'https://www.lhh.com/en-us/individuals/' },
+        ];
+
+        const PATHS = [
+            // Health (24)
+            { n: 'Aledade', c: 'Health', d: 'Technology for independent primary care.', u: 'https://www.aledade.com/careers', e: '🏥' },
+            { n: 'Alma', c: 'Health', d: 'High-quality mental healthcare platform.', u: 'https://helloalma.com/careers/', e: '🏥' },
+            { n: 'Brightline', c: 'Health', d: 'Behavioral health for children and families.', u: 'https://www.hellobrightline.com/careers', e: '🏥' },
+            { n: 'Cityblock Health', c: 'Health', d: 'Healthcare for underserved communities.', u: 'https://www.cityblock.com/careers', e: '🏥' },
+            { n: 'Color Health', c: 'Health', d: 'Infrastructure for public health at scale.', u: 'https://www.color.com/careers', e: '🏥' },
+            { n: 'Formation Bio', c: 'Health', d: 'AI-driven drug development platform.', u: 'https://formationbio.com/careers', e: '🏥' },
+            { n: 'Grow Therapy', c: 'Health', d: 'Platform for mental health practices.', u: 'https://growtherapy.com/careers', e: '🏥' },
+            { n: 'Headway', c: 'Health', d: 'Mental healthcare access infrastructure.', u: 'https://headway.co/careers', e: '🏥' },
+            { n: 'Hinge Health', c: 'Health', d: 'Digital clinic for joint and muscle pain.', u: 'https://www.hingehealth.com/careers/', e: '🏥' },
+            { n: 'Hippocratic AI', c: 'Health', d: 'Safety-focused LLMs for healthcare.', u: 'https://www.hippocraticai.com/careers', e: '🏥' },
+            { n: 'Honor', c: 'Health', d: 'Empowering home care agencies and workers.', u: 'https://www.joinhonor.com/careers', e: '🏥' },
+            { n: 'Included Health', c: 'Health', d: 'Healthcare navigation and clinical care.', u: 'https://includedhealth.com/careers/', e: '🏥' },
+            { n: 'Lyra Health', c: 'Health', d: 'Mental health benefit transformation.', u: 'https://www.lyrahealth.com/careers/', e: '🏥' },
+            { n: 'Maven Clinic', c: 'Health', d: 'Virtual clinic for women and families.', u: 'https://www.mavenclinic.com/careers', e: '🏥' },
+            { n: 'Omada Health', c: 'Health', d: 'Virtual care for chronic conditions.', u: 'https://www.omadahealth.com/careers', e: '🏥' },
+            { n: 'Pair Team', c: 'Health', d: 'Connecting clinics to digital care networks.', u: 'https://www.pairteam.com/careers', e: '🏥' },
+            { n: 'Papa', c: 'Health', d: 'Companionship for seniors and families.', u: 'https://www.papa.com/careers', e: '🏥' },
+            { n: 'Pearl Health', c: 'Health', d: 'Primary care value-based technology.', u: 'https://pearlhealth.com/careers/', e: '🏥' },
+            { n: 'Pomelo Care', c: 'Health', d: 'Virtual maternity and neonatal care.', u: 'https://www.pomelocare.com/careers', e: '🏥' },
+            { n: 'Ro', c: 'Health', d: 'Direct-to-patient telehealth company.', u: 'https://ro.co/careers/', e: '🏥' },
+            { n: 'Spring Health', c: 'Health', d: 'Mental health benefits for employers.', u: 'https://www.springhealth.com/careers/', e: '🏥' },
+            { n: 'Sword Health', c: 'Health', d: 'AI-powered physical therapy.', u: 'https://swordhealth.com/careers', e: '🏥' },
+            { n: 'Virta Health', c: 'Health', d: 'Type 2 diabetes reversal through care.', u: 'https://www.virtahealth.com/careers', e: '🏥' },
+            { n: 'Waymark', c: 'Health', d: 'Community care for Medicaid members.', u: 'https://www.waymark.com/careers', e: '🏥' },
+            // Climate (14)
+            { n: 'Arcadia Power', c: 'Climate', d: 'Clean energy utility platform.', u: 'https://www.arcadia.com/careers', e: '🌍' },
+            { n: 'Charm Industrial', c: 'Climate', d: 'Carbon removal via bio-oil sequestration.', u: 'https://charmindustrial.com/careers', e: '🌍' },
+            { n: 'Climeworks', c: 'Climate', d: 'Direct air capture of CO₂ at industrial scale.', u: 'https://www.climeworks.com/careers', e: '🌍' },
+            { n: 'Commonwealth Fusion', c: 'Climate', d: 'Compact fusion energy for a clean grid.', u: 'https://cfs.energy/careers', e: '🌍' },
+            { n: 'Crusoe Energy', c: 'Climate', d: 'Stranded energy solutions for compute and climate.', u: 'https://www.crusoeenergy.com/careers', e: '🌍' },
+            { n: 'Ecovative', c: 'Climate', d: 'Mycelium-based materials replacing plastics.', u: 'https://www.ecovative.com/pages/careers', e: '🌍' },
+            { n: 'Electra', c: 'Climate', d: 'Green iron production via electrochemistry.', u: 'https://electra.earth/careers', e: '🌍' },
+            { n: 'Moment Energy', c: 'Climate', d: 'Second-life EV batteries for energy storage.', u: 'https://www.momentenergy.com/careers', e: '🌍' },
+            { n: 'Natel Energy', c: 'Climate', d: 'Run-of-river hydropower restoring fish habitat.', u: 'https://www.natelenergy.com/careers', e: '🌍' },
+            { n: 'Redwood Materials', c: 'Climate', d: 'Battery recycling and supply chain.', u: 'https://www.redwoodmaterials.com/careers/', e: '🌍' },
+            { n: 'Rho Motion', c: 'Climate', d: 'EV and battery market intelligence.', u: 'https://rhomotion.com/careers', e: '🌍' },
+            { n: 'Twelve', c: 'Climate', d: 'CO₂-to-product conversion technology.', u: 'https://www.twelve.co/careers', e: '🌍' },
+            { n: 'Turntide Technologies', c: 'Climate', d: 'Smart motor systems cutting industrial energy use.', u: 'https://turntide.com/careers/', e: '🌍' },
+            { n: 'Watershed', c: 'Climate', d: 'Enterprise carbon management platform.', u: 'https://watershed.com/careers', e: '🌍' },
+            // Education (10)
+            { n: 'Age of Learning', c: 'Education', d: 'Digital curriculum for PreK–5 learners.', u: 'https://www.ageoflearning.com/careers/', e: '📚' },
+            { n: 'Chegg', c: 'Education', d: 'Connected learning platform for students.', u: 'https://careers.chegg.com/', e: '📚' },
+            { n: 'Coursera', c: 'Education', d: 'Online degrees and professional certificates.', u: 'https://careers.coursera.com/', e: '📚' },
+            { n: 'Duolingo', c: 'Education', d: 'Science-based language learning platform.', u: 'https://careers.duolingo.com/', e: '📚' },
+            { n: 'Grad Leaders', c: 'Education', d: 'Career services technology for universities.', u: 'https://www.gradleaders.com/careers', e: '📚' },
+            { n: 'Khan Academy', c: 'Education', d: 'Free, world-class education for anyone, anywhere.', u: 'https://www.khanacademy.org/careers', e: '📚' },
+            { n: 'Newsela', c: 'Education', d: 'Instructional content platform for K–12.', u: 'https://newsela.com/about/careers/', e: '📚' },
+            { n: 'Paper', c: 'Education', d: '24/7 tutoring and academic support for schools.', u: 'https://www.paper.co/careers', e: '📚' },
+            { n: 'Synthesis', c: 'Education', d: 'Problem-solving education for ambitious kids.', u: 'https://www.synthesis.com/careers', e: '📚' },
+            { n: 'Zearn', c: 'Education', d: 'Non-profit math learning for grades K–8.', u: 'https://about.zearn.org/careers', e: '📚' },
+            // Civic (10)
+            { n: 'Beneficiary Technologies', c: 'Civic', d: 'Benefits access technology for government.', u: 'https://www.beneficiary.tech/careers', e: '🏛️' },
+            { n: 'Bloomberg Philanthropies', c: 'Civic', d: 'Philanthropy addressing climate, public health, arts.', u: 'https://www.bloomberg.org/careers/', e: '🏛️' },
+            { n: 'Code for America', c: 'Civic', d: 'Technology in service of people and society.', u: 'https://www.codeforamerica.org/jobs', e: '🏛️' },
+            { n: 'DemocracyWorks', c: 'Civic', d: 'Nonpartisan voter registration and election tech.', u: 'https://www.democracyworks.com/careers', e: '🏛️' },
+            { n: 'mRelief', c: 'Civic', d: 'Simplifying benefits access for low-income families.', u: 'https://www.mrelief.com/about', e: '🏛️' },
+            { n: 'Nava PBC', c: 'Civic', d: 'Rebuilding government services for people.', u: 'https://www.navapbc.com/careers', e: '🏛️' },
+            { n: 'Palantir', c: 'Civic', d: 'Data platforms for government and enterprise.', u: 'https://www.palantir.com/careers/', e: '🏛️' },
+            { n: 'Propel', c: 'Civic', d: 'Financial tools for low-income Americans.', u: 'https://www.joinpropel.com/careers', e: '🏛️' },
+            { n: 'Topos', c: 'Civic', d: 'AI tools for civic and government organizations.', u: 'https://topos.ai/careers', e: '🏛️' },
+            { n: 'U.S. Digital Service', c: 'Civic', d: 'Improving federal services through technology.', u: 'https://www.usds.gov/apply', e: '🏛️' },
+            // FinTech (10)
+            { n: 'Brex', c: 'FinTech', d: 'Financial OS for modern, scaling companies.', u: 'https://www.brex.com/careers', e: '💳' },
+            { n: 'Chime', c: 'FinTech', d: 'Fee-free banking for financial peace of mind.', u: 'https://www.chime.com/about/careers/', e: '💳' },
+            { n: 'Checkout.com', c: 'FinTech', d: 'Global payment solutions for digital business.', u: 'https://www.checkout.com/careers', e: '💳' },
+            { n: 'Climb Credit', c: 'FinTech', d: 'Income-share financing for career training.', u: 'https://climbcredit.com/careers', e: '💳' },
+            { n: 'Klarna', c: 'FinTech', d: 'Buy-now-pay-later and smart shopping tools.', u: 'https://www.klarna.com/careers/', e: '💳' },
+            { n: 'Marqeta', c: 'FinTech', d: 'Modern card issuing platform for innovators.', u: 'https://www.marqeta.com/company/careers', e: '💳' },
+            { n: 'Plaid', c: 'FinTech', d: 'Data network powering the fintech ecosystem.', u: 'https://plaid.com/careers/', e: '💳' },
+            { n: 'Ramp', c: 'FinTech', d: 'Corporate cards and expense management platform.', u: 'https://ramp.com/careers', e: '💳' },
+            { n: 'Stash', c: 'FinTech', d: 'Investing and banking app for everyday Americans.', u: 'https://www.stash.com/careers', e: '💳' },
+            { n: 'Stripe', c: 'FinTech', d: 'Global payment infrastructure for the internet.', u: 'https://stripe.com/jobs', e: '💳' },
+        ];
+
+        const TERMS = [
+            { t: 'Generative AI', d: 'AI capable of creating new text, code, images, or data by learning patterns from vast training corpora.' },
+            { t: 'LLM', d: 'Large Language Model — the transformer-based cognitive engine powering modern conversational AI systems.' },
+            { t: 'RAG', d: 'Retrieval-Augmented Generation. Grounds AI responses in verified, up-to-date external knowledge.' },
+            { t: 'Prompting', d: 'The precise method of crafting instructions or context to guide AI toward the desired output or behavior.' },
+            { t: 'Fine-tuning', d: 'Adapting a pretrained model on a domain-specific dataset to improve performance on targeted tasks.' },
+            { t: 'Embedding', d: 'A dense vector representation of data (text, images) that captures semantic meaning in high-dimensional space.' },
+            { t: 'Token', d: 'The fundamental unit of text an LLM processes — roughly ¾ of a word in English on average.' },
+            { t: 'Agent', d: 'An autonomous AI system that perceives its environment, makes decisions, and takes goal-directed actions.' },
+        ];
+
+        const CATEGORIES = [
+            { id: 'All', icon: '✨', bg: 'bg-violet-50/60', border: 'border-violet-100' },
+            { id: 'Health', icon: '🏥', bg: 'bg-rose-50/60', border: 'border-rose-100' },
+            { id: 'Climate', icon: '🌍', bg: 'bg-emerald-50/60', border: 'border-emerald-100' },
+            { id: 'Education', icon: '📚', bg: 'bg-blue-50/60', border: 'border-blue-100' },
+            { id: 'Civic', icon: '🏛️', bg: 'bg-amber-50/60', border: 'border-amber-100' },
+            { id: 'FinTech', icon: '💳', bg: 'bg-indigo-50/60', border: 'border-indigo-100' },
+        ];
+
+        /* ─────────── HOOKS ─────────── */
+
+        function useReveal() {
+            useEffect(() => {
+                const els = document.querySelectorAll('.reveal');
+                const io = new IntersectionObserver(entries => {
+                    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+                }, { threshold: 0.12 });
+                els.forEach(el => io.observe(el));
+                return () => io.disconnect();
+            }, []);
+        }
+
+        /* ─────────── SUB-COMPONENTS ─────────── */
+
+        const SectionLabel = ({ children }) => (
+            <p className="flex items-center gap-3 text-[9px] font-bold tracking-[0.3em] uppercase text-violet-600 mb-5">
+                <span className="w-6 h-px bg-violet-400 inline-block"></span>{children}
+            </p>
+        );
+
+        const Badge = ({ children, dark }) => (
+            <span className={`chip ${dark ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-500'}`}>{children}</span>
+        );
+
+        /* Stat counter card */
+        const StatCard = ({ value, label, color }) => (
+            <div className={`rounded-[28px] border p-7 flex flex-col gap-1 card-shadow ${color}`}>
+                <span className="font-serif text-4xl font-bold text-zinc-900">{value}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-zinc-400">{label}</span>
+            </div>
+        );
+
+        /* Portal sidebar button */
+        const PortalBtn = ({ portal, active, onClick }) => (
+            <div className="flex flex-col gap-0.5 flex-shrink-0">
+                <button
+                    onClick={onClick}
+                    className={`flex items-center gap-2 py-2.5 px-4 rounded-2xl border transition-all text-left w-full ${active ? 'portal-active border-zinc-900' : `${portal.bg} ${portal.border} hover:bg-white hover:border-zinc-200`}`}
+                >
+                    <span className="text-base flex-shrink-0">{portal.icon}</span>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-900 whitespace-nowrap">{portal.n}</span>
+                </button>
+                {portal.id !== 'All' && (
+                    <a href={portal.u} target="_blank" rel="noopener noreferrer"
+                        className="pl-3 text-[8px] font-bold uppercase tracking-widest text-zinc-300 hover:text-violet-600 transition-colors">
+                        Direct Portal ↗
+                    </a>
+                )}
+            </div>
+        );
+
+        /* Module row */
+        const ModuleRow = ({ item, idx }) => (
+            <a
+                key={item.n + idx}
+                href={item.u}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between py-5 border-b border-zinc-50 hover:bg-violet-50/40 px-5 -mx-5 rounded-2xl transition-all"
+                style={{ animationDelay: `${Math.min(idx * 0.04, 0.4)}s` }}
+            >
+                <div className="flex items-center gap-5 min-w-0">
+                    <div className="w-11 h-11 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-lg shadow-sm flex-shrink-0">{item.e}</div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-semibold text-zinc-900 leading-snug">{item.n}</p>
+                        <p className="text-[11px] text-zinc-400 truncate font-light mt-0.5">{item.d}</p>
+                    </div>
+                </div>
+                <span className="text-zinc-200 group-hover:text-violet-500 text-sm ml-4 flex-shrink-0 transition-colors">↗</span>
+            </a>
+        );
+
+        /* Company row */
+        const CompanyRow = ({ company, idx }) => (
+            <a
+                href={company.u}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between py-5 border-b border-zinc-50 hover:bg-violet-50/40 px-5 -mx-5 rounded-2xl transition-all"
+            >
+                <div className="flex items-center gap-5 min-w-0">
+                    <div className="w-11 h-11 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-lg shadow-sm flex-shrink-0">{company.e}</div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-semibold text-zinc-900">{company.n}</p>
+                        <p className="text-[11px] text-zinc-400 truncate font-light mt-0.5">{company.d}</p>
+                    </div>
+                </div>
+                <span className="text-zinc-200 group-hover:text-violet-500 text-sm ml-4 flex-shrink-0 transition-colors">↗</span>
+            </a>
+        );
+
+        /* ─────────── APP ─────────── */
+
+        const App = () => {
+            const [active, setActive] = useState('home');
+            const [pf, setPf] = useState(null);
+            const [af, setAf] = useState(null);
+
+            useReveal();
+
+            const go = (id) => {
+                setActive(id);
+                const el = document.getElementById(id);
+                if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            };
+
+            // track active section on scroll
+            useEffect(() => {
+                const ids = NAVS.map(n => n.id);
+                const handler = () => {
+                    let cur = 'home';
+                    for (const id of ids) {
+                        const el = document.getElementById(id);
+                        if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+                    }
+                    setActive(cur);
+                };
+                window.addEventListener('scroll', handler, { passive: true });
+                return () => window.removeEventListener('scroll', handler);
+            }, []);
+
+            const filteredPaths = useMemo(() => {
+                if (pf === null) return [];
+                const list = pf === 'All' ? PATHS : PATHS.filter(p => p.c === pf);
+                return [...list].sort((a, b) => a.n.localeCompare(b.n));
+            }, [pf]);
+
+            const studioResources = useMemo(() => {
+                if (af === null) return [];
+                const list = af === 'All' ? LEARNING_MODULES : LEARNING_MODULES.filter(m => m.p === af);
+                return [...list].sort((a, b) => a.n.localeCompare(b.n));
+            }, [af]);
+
+            const activePortalMeta = useMemo(() => {
+                if (af === null) return null;
+                if (af === 'All') return { desc: "Explore the complete collection of learning tracks across all available portals.", icon: '✨' };
+                const p = PORTALS.find(p => p.id === af);
+                return { desc: p?.d || '', icon: p?.icon || '' };
+            }, [af]);
+
+            return (
+                <div className="min-h-screen">
+
+                    {/* ── NAV ── */}
+                    <nav className="sticky top-0 z-[100] bg-white/80 backdrop-blur-md border-b border-zinc-100/80">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+                            <button onClick={() => go('home')} className="font-serif text-lg font-medium tracking-tight text-zinc-900 whitespace-nowrap flex-shrink-0">
+                                Forward Moves
+                            </button>
+                            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                                {NAVS.map(s => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => go(s.id)}
+                                        className={`px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0 ${active === s.id ? 'bg-zinc-900 text-white' : 'text-zinc-400 hover:text-zinc-800 hover:bg-zinc-50'}`}
+                                    >
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* ── HERO ── */}
+                    <section id="home" className="hero-mesh pt-28 pb-24 border-b border-zinc-100">
+                        <div className="max-w-6xl mx-auto px-6">
+
+                            {/* kicker + headline */}
+                            <div className="max-w-3xl mb-16 reveal">
+                                <SectionLabel>Resource Collective · 13,000+ Professionals</SectionLabel>
+                                <h1 className="font-serif text-5xl md:text-7xl text-zinc-900 leading-[1.08] mb-7">
+                                    Fuel your<br /><em className="italic text-violet-600 font-normal">infinite growth.</em>
+                                </h1>
+                                <p className="text-zinc-500 text-xl font-light leading-relaxed mb-10 max-w-2xl">
+                                    A curated space for continuous upskilling, AI mastery, and staying ahead of the curve.
+                                    Your journey doesn't end at a destination — it evolves with every skill you acquire.
+                                </p>
+                                <blockquote className="font-serif italic text-base text-zinc-400 border-l-2 border-violet-400 pl-6 py-1 max-w-xl">
+                                    "The secret of change is to focus all of your energy not on fighting the old, but on building the new."
+                                    <cite className="not-italic block font-sans text-[9px] font-bold tracking-widest uppercase mt-3 text-zinc-300">— Socrates</cite>
+                                </blockquote>
+                            </div>
+
+                            {/* CTA cards */}
+                            <p className="text-[9px] font-bold uppercase tracking-[0.22em] text-zinc-300 mb-6 border-t border-zinc-100 pt-8">
+                                Explore what's inside
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger reveal">
+                                {[
+                                    { id: 'studio', icon: '⚡', title: 'Skill Studio', desc: 'AI certifications and technical training across 9 partner portals.', bg: 'bg-violet-50/60 border-violet-100 hover:bg-violet-100/60' },
+                                    { id: 'paths', icon: '🌍', title: 'Careers', desc: 'Mission-driven opportunities across Health, Climate, FinTech & more.', bg: 'bg-blue-50/60 border-blue-100 hover:bg-blue-100/60' },
+                                    { id: 'community', icon: '🤝', title: 'Community', desc: 'Networking, mentorship, and the alumni collective.', bg: 'bg-orange-50/60 border-orange-100 hover:bg-orange-100/60' },
+                                    { id: 'mastery', icon: '🎯', title: 'Interviewing', desc: 'Interview prep, frameworks, and behavioral excellence.', bg: 'bg-emerald-50/60 border-emerald-100 hover:bg-emerald-100/60' },
+                                ].map(card => (
+                                    <button
+                                        key={card.id}
+                                        onClick={() => go(card.id)}
+                                        className={`group p-8 border rounded-[36px] text-left transition-all card-shadow hover-lift animate-fadeUp ${card.bg}`}
+                                    >
+                                        <div className="w-13 h-13 bg-white rounded-2xl flex items-center justify-center text-2xl mb-7 shadow-sm w-12 h-12">{card.icon}</div>
+                                        <h3 className="font-serif text-xl text-zinc-900 mb-2">{card.title}</h3>
+                                        <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{card.desc}</p>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── SKILL STUDIO ── */}
+                    <section id="studio" className="py-28 bg-white border-b border-zinc-100">
+                        <div className="max-w-7xl mx-auto px-6">
+                            <div className="mb-16 reveal">
+                                <SectionLabel>Learning Portals</SectionLabel>
+                                <h2 className="font-serif text-4xl text-zinc-900 mb-4">Skill Studio</h2>
+                                <p className="text-zinc-400 text-lg font-light max-w-xl">Select a portal on the left to explore its curriculum and AI modules.</p>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row gap-8 lg:items-start relative">
+                                {/* sidebar — horizontal scroll on mobile, vertical on desktop */}
+                                <div className="lg:w-[220px] sidebar-sticky flex-shrink-0">
+                                    <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 lg:pb-10">
+                                        <PortalBtn
+                                            portal={{ id: 'All', n: 'All Modules', u: '#', icon: '✨', bg: 'bg-zinc-50', border: 'border-zinc-100' }}
+                                            active={af === 'All'}
+                                            onClick={() => setAf('All')}
+                                        />
+                                        {PORTALS.map(portal => (
+                                            <PortalBtn key={portal.id} portal={portal} active={af === portal.id} onClick={() => setAf(portal.id)} />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* content panel */}
+                                <div className="flex-grow min-w-0 reveal">
+                                    <div className="bg-white border border-zinc-100 rounded-[36px] p-8 md:p-10 card-shadow min-h-[480px]">
+                                        {af === null ? (
+                                            <div className="h-full min-h-[440px] flex flex-col items-center justify-center text-center px-8">
+                                                <div className="w-16 h-16 rounded-2xl bg-violet-50 border border-violet-100 flex items-center justify-center text-3xl mb-6">⚡</div>
+                                                <h3 className="font-serif text-2xl text-zinc-900 mb-3">Choose a Portal</h3>
+                                                <p className="text-sm text-zinc-400 font-light leading-relaxed max-w-xs">Select a learning portal from the list on the left to browse its curriculum and available modules.</p>
+                                                <div className="mt-8 flex flex-wrap gap-2 justify-center">
+                                                    {PORTALS.slice(0, 4).map(p => (
+                                                        <button key={p.id} onClick={() => setAf(p.id)} className={`chip border ${p.bg} ${p.border} text-zinc-500 cursor-pointer hover:border-zinc-400 transition-all`}>{p.icon} {p.n}</button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="mb-8 border-b border-zinc-50 pb-7">
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="text-2xl">{activePortalMeta.icon}</span>
+                                                            <h3 className="font-serif text-2xl text-zinc-900">{af === 'All' ? 'Complete Curriculum' : `${af} Curriculum`}</h3>
+                                                        </div>
+                                                        <Badge dark>{studioResources.length} Tracks</Badge>
+                                                    </div>
+                                                    <p className="text-sm text-zinc-400 leading-relaxed font-light italic">{activePortalMeta.desc}</p>
+                                                </div>
+                                                {studioResources.length > 0 ? (
+                                                    <div>
+                                                        {studioResources.map((item, idx) => (
+                                                            <ModuleRow key={item.n + idx} item={item} idx={idx} />
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="py-20 text-center flex flex-col items-center">
+                                                        <span className="text-4xl mb-4 opacity-20">📂</span>
+                                                        <p className="text-sm text-zinc-400 font-light italic max-w-xs">Portal access is available via the direct link on the left.</p>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── CAREERS ── */}
+                    <section id="paths" className="py-28 bg-zinc-50 border-y border-zinc-100">
+                        <div className="max-w-7xl mx-auto px-6">
+                            <div className="mb-16 reveal">
+                                <SectionLabel>Mission-Driven Companies</SectionLabel>
+                                <h2 className="font-serif text-4xl text-zinc-900 mb-4">Careers</h2>
+                                <p className="text-zinc-400 text-lg font-light max-w-xl">Select an industry on the left to explore companies currently hiring.</p>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row gap-8 lg:items-start relative">
+                                {/* sidebar — horizontal scroll on mobile, vertical on desktop */}
+                                <div className="lg:w-[220px] sidebar-sticky flex-shrink-0">
+                                    <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-2 lg:pb-10">
+                                        {CATEGORIES.map(cat => (
+                                            <div key={cat.id} className="flex-shrink-0">
+                                                <button
+                                                    onClick={() => setPf(cat.id)}
+                                                    className={`flex items-center gap-2 py-2.5 px-4 rounded-2xl border transition-all text-left w-full ${pf === cat.id ? 'portal-active border-zinc-900' : `${cat.bg} ${cat.border} hover:bg-white hover:border-zinc-200`}`}
+                                                >
+                                                    <span className="text-base flex-shrink-0">{cat.icon}</span>
+                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-900 whitespace-nowrap">{cat.id}</span>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* content panel */}
+                                <div className="flex-grow min-w-0 reveal">
+                                    <div className="bg-white border border-zinc-100 rounded-[36px] p-8 md:p-10 card-shadow min-h-[480px]">
+                                        {pf === null ? (
+                                            <div className="h-full min-h-[440px] flex flex-col items-center justify-center text-center px-8">
+                                                <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-3xl mb-6">🌍</div>
+                                                <h3 className="font-serif text-2xl text-zinc-900 mb-3">Choose a Sector</h3>
+                                                <p className="text-sm text-zinc-400 font-light leading-relaxed max-w-xs">Select an industry on the left to explore mission-driven companies currently hiring across that sector.</p>
+                                                <div className="mt-8 flex flex-wrap gap-2 justify-center">
+                                                    {CATEGORIES.slice(1).map(c => (
+                                                        <button key={c.id} onClick={() => setPf(c.id)} className={`chip border ${c.bg} ${c.border} text-zinc-500 cursor-pointer hover:border-zinc-400 transition-all`}>{c.icon} {c.id}</button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="flex items-center justify-between mb-8 pb-6 border-b border-zinc-50">
+                                                    <h3 className="font-serif text-2xl text-zinc-900">{pf === 'All' ? 'All Sectors' : `${pf} Sector`}</h3>
+                                                    <Badge dark>{filteredPaths.length} Companies</Badge>
+                                                </div>
+                                                {filteredPaths.map((company, idx) => (
+                                                    <CompanyRow key={company.n + idx} company={company} idx={idx} />
+                                                ))}
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── COMMUNITY ── */}
+                    <section id="community" className="py-28 bg-white border-b border-zinc-100">
+                        <div className="max-w-6xl mx-auto px-6">
+                            <div className="mb-16 reveal">
+                                <SectionLabel>Alumni Network</SectionLabel>
+                                <h2 className="font-serif text-4xl text-zinc-900 mb-4">Community</h2>
+                                <p className="text-zinc-400 text-lg font-light max-w-xl">Real humans, real connections. Your next opportunity likely lives here.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 reveal stagger">
+                                {/* Ambassador card */}
+                                <div className="p-10 bg-zinc-50 border border-zinc-100 rounded-[40px] card-shadow hover-lift">
+                                    <div className="w-16 h-16 rounded-[18px] overflow-hidden mb-7 border-4 border-white shadow-md">
+                                        <img src="https://ui-avatars.com/api/?name=Yvonne+Martinez&background=7c3aed&color=fff&size=128" alt="Yvonne Martinez" />
+                                    </div>
+                                    <p className="font-serif text-2xl mb-1 text-zinc-900">Yvonne Martinez</p>
+                                    <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-400 mb-6">Ambassador of Alumni Engagement</p>
+                                    <p className="text-zinc-500 text-base leading-relaxed mb-8 font-light italic">
+                                        "Mentorship and advocacy for students and alumni navigating the generative AI transition."
+                                    </p>
+                                    <a href="https://www.linkedin.com/in/ymartinez40/" target="_blank" rel="noopener noreferrer"
+                                        className="inline-block px-7 py-3.5 bg-white border border-violet-200 text-violet-600 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-violet-600 hover:text-white transition-all shadow-sm">
+                                        LinkedIn Profile
+                                    </a>
+                                </div>
+
+                                {/* Collective card */}
+                                <div className="p-10 bg-violet-50/30 border border-violet-100 rounded-[40px] card-shadow hover-lift flex flex-col justify-between">
+                                    <div>
+                                        <div className="text-3xl mb-7">🌍</div>
+                                        <p className="font-serif text-2xl mb-1 text-zinc-900">The Human Network</p>
+                                        <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-violet-600 mb-6">Alumni Collective</p>
+                                        <p className="text-zinc-500 text-base leading-relaxed mb-8 font-light">
+                                            A curated collective for sharing system design theories, breakthroughs, and job leads within a high-trust network of 13,000+ professionals.
+                                        </p>
+                                        <div className="tag-strip mb-8">
+                                            <span className="tag">Job Leads</span>
+                                            <span className="tag">AI Breakthroughs</span>
+                                            <span className="tag">System Design</span>
+                                            <span className="tag">Mentorship</span>
+                                        </div>
+                                    </div>
+                                    <a href="https://www.linkedin.com/groups/16093058/" target="_blank" rel="noopener noreferrer"
+                                        className="inline-block px-7 py-3.5 bg-white border border-violet-200 text-violet-600 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-violet-600 hover:text-white transition-all shadow-sm self-start">
+                                        Join the Collective
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Tips row */}
+                            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5 reveal stagger">
+                                {[
+                                    { icon: '📌', title: 'Pin Your Profile', tip: 'Update your LinkedIn headline with "Open to Work" and add AI-related skills to improve recruiter visibility.' },
+                                    { icon: '💬', title: 'Engage Weekly', tip: 'Comment on two posts from your network per week. Visibility compounds — small consistent actions create lasting connections.' },
+                                    { icon: '🤝', title: 'Offer First', tip: 'Lead with generosity. Share a job lead, an article, or a thoughtful recommendation before asking for anything in return.' },
+                                ].map(t => (
+                                    <div key={t.title} className="p-7 bg-zinc-50 border border-zinc-100 rounded-[28px] card-shadow">
+                                        <div className="text-2xl mb-4">{t.icon}</div>
+                                        <p className="text-sm font-semibold text-zinc-900 mb-2">{t.title}</p>
+                                        <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{t.tip}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── INTERVIEWING ── */}
+                    <section id="mastery" className="py-28 bg-zinc-50 border-b border-zinc-100">
+                        <div className="max-w-6xl mx-auto px-6">
+                            <div className="mb-16 reveal">
+                                <SectionLabel>Preparation Hub</SectionLabel>
+                                <h2 className="font-serif text-4xl text-zinc-900 mb-4">Interviewing</h2>
+                                <p className="text-zinc-400 text-lg font-light max-w-xl">Prepare deeply. Show up with confidence, clarity, and conviction.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16 reveal stagger">
+                                {[
+                                    { n: 'Exponent', d: 'Advanced technical and product interview preparation with real practice questions.', u: 'https://www.tryexponent.com/', icon: '🎯', bg: 'bg-emerald-50/60 border-emerald-100' },
+                                    { n: 'Behavioral', d: 'Soft-skill frameworks, STAR-method stories, and high-stakes dialogue practice.', u: 'https://github.com/ashishps1/awesome-behavioral-interviews', icon: '🤝', bg: 'bg-blue-50/60 border-blue-100' },
+                                    { n: 'Frameworks', d: 'Strategic growth maps, scheduling guides, and career roadmap planning resources.', u: 'https://resources.workable.com/hiring-with-workable/scheduling-interviews', icon: '📅', bg: 'bg-amber-50/60 border-amber-100' },
+                                ].map(res => (
+                                    <a key={res.n} href={res.u} target="_blank" rel="noopener noreferrer"
+                                        className={`p-9 bg-white border rounded-[36px] card-shadow hover-lift group flex flex-col items-center text-center transition-all ${res.bg}`}>
+
+                                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl mb-7 shadow-sm border border-zinc-50">{res.icon}</div>
+                                        <h3 className="font-serif text-xl text-zinc-900 mb-2">{res.n}</h3>
+                                        <p className="text-[11px] text-zinc-400 leading-relaxed font-light mb-7 flex-grow">{res.d}</p>
+                                        <span className="text-[9px] font-bold uppercase tracking-widest text-zinc-300 group-hover:text-zinc-800 transition-colors">Launch Resource ↗</span>
+                                    </a>
+                                ))}
+                            </div>
+
+                            {/* Quick-tip framework */}
+                            <div className="bg-white border border-zinc-100 rounded-[36px] p-10 card-shadow reveal">
+                                <h4 className="font-serif text-xl text-zinc-900 mb-7">The STAR Framework</h4>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {[
+                                        { letter: 'S', word: 'Situation', note: 'Set the context clearly and concisely — one or two sentences maximum.' },
+                                        { letter: 'T', word: 'Task', note: 'Define your specific role and responsibility in the scenario.' },
+                                        { letter: 'A', word: 'Action', note: 'Describe the deliberate steps you took — make it personal, not "we".' },
+                                        { letter: 'R', word: 'Result', note: 'Quantify the outcome. Numbers, percentages, and timeframes win interviews.' },
+                                    ].map(s => (
+                                        <div key={s.letter} className="p-6 bg-zinc-50 rounded-[24px] border border-zinc-100">
+                                            <div className="w-9 h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-serif text-lg font-bold mb-4">{s.letter}</div>
+                                            <p className="text-sm font-semibold text-zinc-900 mb-1">{s.word}</p>
+                                            <p className="text-[11px] text-zinc-400 leading-relaxed font-light">{s.note}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── GLOSSARY ── */}
+                    <section id="glossary" className="py-28 bg-white border-t border-zinc-100">
+                        <div className="max-w-6xl mx-auto px-6">
+                            <div className="flex flex-col lg:flex-row gap-16 reveal">
+                                <div className="lg:w-1/3">
+                                    <SectionLabel>AI Vocabulary</SectionLabel>
+                                    <h3 className="font-serif text-4xl mb-5 text-zinc-900">Glossary</h3>
+                                    <p className="text-zinc-500 text-base leading-relaxed mb-10 font-light">
+                                        Standard terminology for navigating technical and strategic discussions in the generative AI space.
+                                    </p>
+                                    <div className="flex flex-col gap-3">
+                                        <a href="https://www.ibm.com/topics/artificial-intelligence/glossary" target="_blank" rel="noopener noreferrer"
+                                            className="px-6 py-3.5 bg-white border border-zinc-200 rounded-2xl text-[9px] font-bold uppercase tracking-widest hover:bg-zinc-900 hover:text-white transition-all shadow-sm text-center">
+                                            IBM Glossary ↗
+                                        </a>
+                                        <a href="https://developers.google.com/machine-learning/glossary" target="_blank" rel="noopener noreferrer"
+                                            className="px-6 py-3.5 bg-white border border-zinc-200 rounded-2xl text-[9px] font-bold uppercase tracking-widest hover:bg-zinc-900 hover:text-white transition-all shadow-sm text-center">
+                                            Google ML Glossary ↗
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="lg:w-2/3">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 p-1 bg-zinc-100 rounded-[40px] overflow-hidden border border-zinc-200 card-shadow-lg">
+                                        {TERMS.map((term, i) => (
+                                            <div key={term.t} className="p-8 bg-white hover:bg-violet-50/50 transition-colors group cursor-default">
+                                                <p className="font-serif text-lg text-zinc-900 mb-2 group-hover:text-violet-700 transition-colors">{term.t}</p>
+                                                <p className="text-[12px] text-zinc-400 leading-relaxed font-light">{term.d}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── FOOTER ── */}
+                    <footer className="py-16 border-t border-zinc-100 bg-zinc-50">
+                        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <p className="font-serif text-xl text-zinc-900">Forward Moves</p>
+                            <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-zinc-300">The Resource Directory Collective · 2025</p>
+                            <div className="flex gap-3">
+                                <button onClick={() => go('home')} className="text-[9px] font-bold uppercase tracking-widest text-zinc-300 hover:text-zinc-900 transition-colors">Overview</button>
+                                <button onClick={() => go('studio')} className="text-[9px] font-bold uppercase tracking-widest text-zinc-300 hover:text-zinc-900 transition-colors">Studio</button>
+                                <button onClick={() => go('community')} className="text-[9px] font-bold uppercase tracking-widest text-zinc-300 hover:text-zinc-900 transition-colors">Community</button>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
